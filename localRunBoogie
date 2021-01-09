@@ -1,0 +1,1 @@
+dotnet ./Source/BoogieDriver/bin/Debug/netcoreapp3.1/BoogieDriver.dll "$@"
