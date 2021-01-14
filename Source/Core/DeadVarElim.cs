@@ -2251,4 +2251,12 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
       return base.VisitBlock(node);
     }
   }
+
+  public class FeatureDetector : ReadOnlyVisitor
+  {
+    public static void Scan(Program program)
+    {
+      Console.WriteLine("Scanning features");
+    }
+  }
 }

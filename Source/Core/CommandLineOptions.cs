@@ -515,6 +515,8 @@ namespace Microsoft.Boogie
     public string ProverPreamble = null;
     public bool WarnNotEliminatedVars = false;
 
+    public bool FeatureDetecting = false;
+
     public enum InstrumentationPlaces
     {
       LoopHeaders,
@@ -554,7 +556,7 @@ namespace Microsoft.Boogie
 
     public int /*(0:3)*/
       ErrorTrace = 1;
-    
+
     public bool ContractInfer = false;
     public bool ExplainHoudini = false;
     public bool ReverseHoudiniWorklist = false;
@@ -1616,7 +1618,8 @@ namespace Microsoft.Boogie
               ps.CheckBooleanFlag("trustNoninterference", ref TrustNoninterference) ||
               ps.CheckBooleanFlag("useBaseNameForFileName", ref UseBaseNameForFileName) ||
               ps.CheckBooleanFlag("freeVarLambdaLifting", ref FreeVarLambdaLifting) ||
-              ps.CheckBooleanFlag("warnNotEliminatedVars", ref WarnNotEliminatedVars)
+              ps.CheckBooleanFlag("warnNotEliminatedVars", ref WarnNotEliminatedVars) ||
+              ps.CheckBooleanFlag("featureDetecting", ref FeatureDetecting)
           )
           {
             // one of the boolean flags matched
@@ -2260,6 +2263,13 @@ namespace Microsoft.Boogie
                 0 (default) - don't print, 1 - print to stdout,
                 2 - print to stderr
   /restartProver
-                Restart the prover after each query";
+                Restart the prover after each query
+
+
+  ---- Robust Boogie Exp options --------------------------------------------------------
+
+  /featureDetecting
+               Engage feature detection mode
+";
   }
 }

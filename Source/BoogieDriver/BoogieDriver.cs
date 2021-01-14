@@ -20,7 +20,7 @@ namespace Microsoft.Boogie
       {
         return 1;
       }
-      
+
       if (CommandLineOptions.Clo.ProcessInfoFlags())
       {
         return 0;

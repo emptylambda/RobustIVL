@@ -448,7 +448,7 @@ namespace Microsoft.Boogie
       {
         programId = "main_program_id";
       }
-
+      //[JEFF] VerifySeparately default to false
       if (CommandLineOptions.Clo.VerifySeparately && 1 < fileNames.Count)
       {
         foreach (var f in fileNames)
@@ -494,6 +494,12 @@ namespace Microsoft.Boogie
               sw.Write(program.ProcessLoops(impl).ToDot());
             }
           }
+        }
+
+        if (CommandLineOptions.Clo.FeatureDetecting)
+        {
+          Console.WriteLine("Engaging feature detection mode");
+          Microsoft.Boogie.FeatureDetector.Scan(program);
         }
 
         if (CommandLineOptions.Clo.StratifiedInlining == 0)
