@@ -52,7 +52,7 @@ namespace Microsoft.Boogie
 
   /// <summary>
   /// Walks an IR, mutating it into a new form. (For a subclass that does not mutate the IR, see ReadOnlyVisitor.)
-  /// </summary>   
+  /// </summary>
   public abstract class StandardVisitor : Visitor
   {
     public Visitor callingVisitor;

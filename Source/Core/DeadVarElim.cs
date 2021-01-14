@@ -2256,7 +2256,17 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
   {
     public static void Scan(Program program)
     {
+      Contract.Requires(program != null);
       Console.WriteLine("Scanning features");
+      FeatureDetector detector = new FeatureDetector();
+      detector.Visit(program);
+    }
+    //[JEFF] remember to return impl; see /Core/StandardVisitor.cs
+    public override Implementation VisitImplementation(Implementation impl)
+    {
+      Console.WriteLine($"Found one procedure impl {impl.Name} at Line{impl.Line}:{impl.Col}");
+
+      return impl;
     }
   }
 }
