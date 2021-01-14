@@ -2264,9 +2264,26 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
     //[JEFF] remember to return impl; see /Core/StandardVisitor.cs
     public override Implementation VisitImplementation(Implementation impl)
     {
-      Console.WriteLine($"Found one procedure impl {impl.Name} at Line{impl.Line}:{impl.Col}");
-
+      Console.WriteLine($"Found one procedure impl {impl.Name} at L:{impl.Line} C:{impl.Col}");
       return impl;
     }
+
+    public override Trigger VisitTrigger(Trigger node)
+    {
+      Console.WriteLine($"Found usage of Trigger at L:{node.Line} C:{node.Col}");
+      node.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
+      Console.WriteLine();
+      return node;
+    }
+
+    public override Expr VisitForallExpr(ForallExpr expr)
+    {
+      Console.WriteLine($"Found one forall at L:{expr.Line} C:{expr.Col}");
+      Console.WriteLine(expr);
+      //[JEFF] Make sure to visit sub for sub-level readers to fire
+      expr = (ForallExpr) this.VisitQuantifierExpr(expr);
+      return expr;
+    }
+
   }
 }
