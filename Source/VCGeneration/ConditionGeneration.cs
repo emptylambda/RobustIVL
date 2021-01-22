@@ -68,9 +68,9 @@ namespace VC
           return Outcome.Inconclusive;
         case ProverInterface.Outcome.Valid:
           return Outcome.Correct;
+        default: // unreachable but the stupid compiler does not understand
+          return Outcome.Inconclusive;
       }
-
-      return Outcome.Inconclusive; // unreachable but the stupid compiler does not understand
     }
 
     [ContractInvariantMethod]
