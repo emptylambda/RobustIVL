@@ -500,6 +500,8 @@ namespace Microsoft.Boogie
         {
           Console.WriteLine("Engaging feature detection mode");
           Microsoft.Boogie.FeatureDetector.Scan(program);
+          // Console.WriteLine("Testing feature surgeon mode");
+          // Microsoft.Boogie.FeatureSurgeon.Scan(program, 33, 8, Expr.True);
         }
 
         if (CommandLineOptions.Clo.StratifiedInlining == 0)

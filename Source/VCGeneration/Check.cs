@@ -32,7 +32,7 @@ namespace Microsoft.Boogie
     private readonly VCExpressionGenerator gen;
 
     private ProverInterface thmProver;
-    
+
     // state for the async interface
     private volatile ProverInterface.Outcome outcome;
     private volatile bool hasOutput;

@@ -98,7 +98,7 @@ namespace VC
     public Dictionary<Incarnation, Absy> incarnationOriginMap = new Dictionary<Incarnation, Absy>();
 
     public Dictionary<Cmd, List<object>> debugInfos = new Dictionary<Cmd, List<object>>();
-    
+
     public Program program;
 
     protected string /*?*/

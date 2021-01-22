@@ -2252,8 +2252,12 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
     }
   }
 
+  /// <summary>
+  /// Boogie language feature detection using ReadOnlyVisitor
+  /// </summary>
   public class FeatureDetector : ReadOnlyVisitor
   {
+    // TODO record list of occurrences
     public static void Scan(Program program)
     {
       Contract.Requires(program != null);
@@ -2271,6 +2275,7 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
     public override Trigger VisitTrigger(Trigger node)
     {
       Console.WriteLine($"Found usage of Trigger at L:{node.Line} C:{node.Col}");
+      //TODO bit crude using Emit() but will do just for now
       node.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
       Console.WriteLine();
       return node;
@@ -2286,4 +2291,36 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
     }
 
   }
+
+  /// <summary>
+  ///    TODO Target-replace certain Boogie feature by source location?
+  ///  see Core/Monomorphization.cs for MonomorphizationVisitor for possible example
+  /// Initialize(Program program, Dictionary<(Line,Col), replacement>)
+  /// NOTE: Line / Col are -1 in case of tok == null
+  /// </summary>
+  public class FeatureSurgeon : StandardVisitor
+  {
+    public static int l;
+    public static int c;
+    public static Expr s;
+    public static void Scan(Program program, int line, int col, Expr sub)
+    {
+      l = line;
+      c = col;
+      s = sub;
+      FeatureSurgeon surgeon = new FeatureSurgeon();
+      surgeon.Visit(program);
+    }
+    public override Expr VisitExpr(Expr node)
+    {
+      if(node.Line == l && node.Col == c)
+      {
+        Console.WriteLine("Hit");
+        return s;
+      }
+      return node;
+    }
+
+  }
+
 }
