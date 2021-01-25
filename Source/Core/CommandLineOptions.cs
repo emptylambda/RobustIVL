@@ -516,6 +516,7 @@ namespace Microsoft.Boogie
     public bool WarnNotEliminatedVars = false;
 
     public bool FeatureDetecting = false;
+    public bool VanillaSMT = false;
 
     public enum InstrumentationPlaces
     {
@@ -1619,7 +1620,8 @@ namespace Microsoft.Boogie
               ps.CheckBooleanFlag("useBaseNameForFileName", ref UseBaseNameForFileName) ||
               ps.CheckBooleanFlag("freeVarLambdaLifting", ref FreeVarLambdaLifting) ||
               ps.CheckBooleanFlag("warnNotEliminatedVars", ref WarnNotEliminatedVars) ||
-              ps.CheckBooleanFlag("featureDetecting", ref FeatureDetecting)
+              ps.CheckBooleanFlag("featureDetecting", ref FeatureDetecting) ||
+              ps.CheckBooleanFlag("vanillaSMT", ref VanillaSMT)
           )
           {
             // one of the boolean flags matched
@@ -2270,6 +2272,9 @@ namespace Microsoft.Boogie
 
   /featureDetecting
                Engage feature detection mode
+  /vanillaSMT
+               SMTLib2 WITHOUT bells and whistles
+
 ";
   }
 }

@@ -409,7 +409,7 @@ namespace Microsoft.Boogie.SMTLib
 
     private void PrepareCommon()
     {
-      if (common.Length == 0)
+      if (common.Length == 0 && !CommandLineOptions.Clo.VanillaSMT)
       {
         SendCommon("(set-option :print-success false)");
         SendCommon("(set-info :smt-lib-version 2.6)");
@@ -567,16 +567,19 @@ namespace Microsoft.Boogie.SMTLib
       FlushAxioms();
 
       PossiblyRestart();
-
-      SendThisVC("(push 1)");
-      SendThisVC("(set-info :boogie-vc-id " + SMTLibNamer.QuoteId(descriptiveName) + ")");
-      if (options.Solver == SolverKind.Z3)
+      //JEFF only include if NOT using vanillaSMT
+      if(!CommandLineOptions.Clo.VanillaSMT)
       {
-        SendThisVC("(set-option :" + Z3.TimeoutOption + " " + options.TimeLimit + ")");
-        SendThisVC("(set-option :" + Z3.RlimitOption + " " + options.ResourceLimit + ")");
-        if (options.RandomSeed.HasValue)
+        SendThisVC("(push 1)");
+        SendThisVC("(set-info :boogie-vc-id " + SMTLibNamer.QuoteId(descriptiveName) + ")");
+        if (options.Solver == SolverKind.Z3)
         {
-          SendThisVC("(set-option :" + Z3.RandomSeedOption + " " + options.RandomSeed.Value + ")");
+          SendThisVC("(set-option :" + Z3.TimeoutOption + " " + options.TimeLimit + ")");
+          SendThisVC("(set-option :" + Z3.RlimitOption + " " + options.ResourceLimit + ")");
+          if (options.RandomSeed.HasValue)
+          {
+            SendThisVC("(set-option :" + Z3.RandomSeedOption + " " + options.RandomSeed.Value + ")");
+          }
         }
       }
       SendThisVC(vcString);
@@ -1506,9 +1509,12 @@ namespace Microsoft.Boogie.SMTLib
       Contract.EnsuresOnThrow<UnexpectedProverOutputException>(true);
 
       var result = CheckOutcomeCore(handler, taskID: taskID);
-      SendThisVC("(pop 1)");
-      FlushLogFile();
-
+      //JEFF
+      if(!CommandLineOptions.Clo.VanillaSMT)
+      {
+        SendThisVC("(pop 1)");
+        FlushLogFile();
+      }
       return result;
     }
 
