@@ -3182,9 +3182,9 @@ namespace Microsoft.Boogie.SMTLib
   public class SMTLibProverContext : DeclFreeProverContext
   {
     internal SMTLibProcessTheoremProver parent;
-    
+
     public readonly HashSet<DatatypeTypeCtorDecl> KnownDatatypes = new HashSet<DatatypeTypeCtorDecl>();
-    
+
     public readonly Dictionary<Function, VCExprNAry> DefinedFunctions = new Dictionary<Function, VCExprNAry>();
 
     public SMTLibProverContext(VCExpressionGenerator gen,

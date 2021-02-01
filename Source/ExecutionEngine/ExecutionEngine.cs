@@ -1357,22 +1357,22 @@ namespace Microsoft.Boogie
       if (CommandLineOptions.Clo.FixedPointEngine != null)
       {
         vcgen = new FixedpointVC(program, CommandLineOptions.Clo.ProverLogFilePath,
-          CommandLineOptions.Clo.ProverLogFileAppend, checkers);
+                                 CommandLineOptions.Clo.ProverLogFileAppend, checkers);
       }
       else if (CommandLineOptions.Clo.StratifiedInlining > 0)
       {
         vcgen = new StratifiedVCGen(program, CommandLineOptions.Clo.ProverLogFilePath,
-          CommandLineOptions.Clo.ProverLogFileAppend, checkers);
+                                    CommandLineOptions.Clo.ProverLogFileAppend, checkers);
       }
       else if (CommandLineOptions.Clo.SecureVcGen != null)
       {
         vcgen = new SecureVCGen(program, CommandLineOptions.Clo.ProverLogFilePath,
-          CommandLineOptions.Clo.ProverLogFileAppend, checkers);
+                                CommandLineOptions.Clo.ProverLogFileAppend, checkers);
       }
       else
       {
-        vcgen = new VCGen(program, CommandLineOptions.Clo.ProverLogFilePath, CommandLineOptions.Clo.ProverLogFileAppend,
-          checkers);
+        vcgen = new VCGen(program, CommandLineOptions.Clo.ProverLogFilePath,
+                          CommandLineOptions.Clo.ProverLogFileAppend, checkers);
       }
 
       return vcgen;
