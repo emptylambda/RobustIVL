@@ -376,7 +376,7 @@ namespace Microsoft.Boogie
       AssertionChecksums = implementation.AssertionChecksums;
     }
   }
-  
+
   public class ExecutionEngine
   {
     public static OutputPrinter printer;
@@ -496,10 +496,18 @@ namespace Microsoft.Boogie
           }
         }
 
+       //JEFF Feature mining
         if (CommandLineOptions.Clo.FeatureDetecting)
         {
           Console.WriteLine("Engaging feature detection mode");
-          Microsoft.Boogie.FeatureDetector.Scan(program);
+          //TODO not sure if we stick to static
+          Microsoft.Boogie.FeatureDetector.Scan(program, "./report.json");
+
+          PrintBplFile("FeatureDetector.bpl", program, false);
+
+          // RemoveRedundancy r = new RemoveRedundancy();
+          // r.Visit(program);
+
           // Console.WriteLine("Testing feature surgeon mode");
           // Microsoft.Boogie.FeatureSurgeon.Scan(program, 33, 8, Expr.True);
         }
@@ -985,7 +993,7 @@ namespace Microsoft.Boogie
 
           ImplIdToCancellationTokenSource.AddOrUpdate(id, cts, (k, ov) => cts);
 
-          var t = new Task((dummy) =>
+          var t = new Task((_dummy) =>
           {
             try
             {
@@ -1164,6 +1172,7 @@ namespace Microsoft.Boogie
       Implementation[] stablePrioritizedImpls, int index, OutputCollector outputCollector, List<Checker> checkers,
       string programId)
     {
+      //JEFF only one impl anyway!
       Implementation impl = stablePrioritizedImpls[index];
       VerificationResult verificationResult = null;
       var output = new StringWriter();

@@ -1672,7 +1672,6 @@ namespace VC
       {
         Contract.Requires(checker != null);
         Contract.Requires(callback != null);
-
         splitNo = no;
 
         impl.Blocks = blocks;

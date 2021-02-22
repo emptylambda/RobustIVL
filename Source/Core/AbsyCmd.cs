@@ -1735,6 +1735,11 @@ namespace Microsoft.Boogie
         return;
       }
 
+      if (CommandLineOptions.Clo.UseBlankCommentAsCmd && this.Comment.Equals(""))
+      {
+        return;
+      }
+
       if (this.Comment.Contains("\n"))
       {
         stream.WriteLine(this, level, "/* {0} */", this.Comment);

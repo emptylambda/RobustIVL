@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Boogie.GraphUtil;
 using System.Diagnostics.Contracts;
+using System.Text.Json;
+using System.IO;
 
 namespace Microsoft.Boogie
 {
@@ -2253,23 +2255,61 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
   }
 
   /// <summary>
+  /// Redundancy removal
+  /// </summary>
+  public class RemoveRedundancy : StandardVisitor
+  {
+    public override Cmd VisitAssertCmd(AssertCmd node)
+    {
+      if(node.Expr == Expr.True)
+      {
+        if(CommandLineOptions.Clo.Trace)
+        {
+          Console.WriteLine("Found Assert True at redundancy removal");
+        }
+      }
+      return new CommentCmd("");
+    }
+
+    public override Cmd VisitAssumeCmd(AssumeCmd node)
+    {
+      if(node.Expr == Expr.True)
+      {
+        Console.WriteLine("Found Assume True at redundancy removal");
+      }
+      return new CommentCmd("");
+    }
+  }
+
+  /// <summary>
   /// Boogie language feature detection using ReadOnlyVisitor
   /// </summary>
-  public class FeatureDetector : ReadOnlyVisitor
+  public class FeatureDetector : StandardVisitor
   {
-    // TODO record list of occurrences
-    public static void Scan(Program program)
+    static Dictionary<Absy, List<Tuple<int,int>>> featureMap;
+    public static void Scan(Program program, string reportFilePath)
     {
       Contract.Requires(program != null);
       Console.WriteLine("Scanning features");
       FeatureDetector detector = new FeatureDetector();
+      featureMap = new Dictionary<Absy, List<Tuple<int,int>>>();
       detector.Visit(program);
+
+      // TODO Serializing: custom JSON converter is needed here
+      // https://makolyte.com/system-text-json-cant-serialize-dictionary-unless-it-has-a-string-key/
+      // String jsonString = JsonSerializer.Serialize(featureMap);
+      String jsonString = "TODO";
+      File.WriteAllText(reportFilePath, jsonString);
     }
-    //[JEFF] remember to return impl; see /Core/StandardVisitor.cs
-    public override Implementation VisitImplementation(Implementation impl)
+
+    public override Implementation VisitImplementation(Implementation node)
     {
-      Console.WriteLine($"Found one procedure impl {impl.Name} at L:{impl.Line} C:{impl.Col}");
-      return impl;
+      Console.WriteLine($"Found one procedure impl {node.Name} at L:{node.Line} C:{node.Col}");
+      node.LocVars = this.VisitVariableSeq(node.LocVars);
+      node.Blocks = this.VisitBlockList(node.Blocks);
+      node.Proc = this.VisitProcedure(cce.NonNull(node.Proc));
+      node = (Implementation) this.VisitDeclWithFormals(node);
+      return node;
     }
 
     public override Trigger VisitTrigger(Trigger node)
@@ -2289,6 +2329,32 @@ b.liveVarsBefore = procICFG[mainImpl.Name].liveVarsAfter[b];
       expr = (ForallExpr) this.VisitQuantifierExpr(expr);
       return expr;
     }
+
+    // TODO
+    public override Cmd VisitAssertCmd(AssertCmd node)
+    {
+      if(node.Expr == Expr.True)
+      {
+        Console.WriteLine($"Found assert true at L:{node.Line} C:{node.Col}");
+      }
+      return node;
+    }
+    // TODO
+    public override Cmd VisitAssumeCmd(AssumeCmd node)
+    {
+      Console.WriteLine($"Visiting Assume cmd at L:{node.Line} C:{node.Col}");
+      node.Emit(new TokenTextWriter("<console>", Console.Out, false, false), 0);
+      Console.WriteLine();
+
+      if(node.Expr.Equals(Expr.True))
+      {
+        // TODO Erase with replacement??
+        Console.WriteLine($"Found ASSUME true at L:{node.Line} C:{node.Col}");
+        return new CommentCmd("");
+      }
+      return node;
+    }
+
 
   }
 

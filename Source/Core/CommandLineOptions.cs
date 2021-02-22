@@ -517,6 +517,8 @@ namespace Microsoft.Boogie
 
     public bool FeatureDetecting = false;
     public bool VanillaSMT = false;
+    public bool UseBlankCommentAsCmd = false;
+
 
     public enum InstrumentationPlaces
     {
@@ -1621,6 +1623,7 @@ namespace Microsoft.Boogie
               ps.CheckBooleanFlag("freeVarLambdaLifting", ref FreeVarLambdaLifting) ||
               ps.CheckBooleanFlag("warnNotEliminatedVars", ref WarnNotEliminatedVars) ||
               ps.CheckBooleanFlag("featureDetecting", ref FeatureDetecting) ||
+              ps.CheckBooleanFlag("blankComment", ref UseBlankCommentAsCmd) ||
               ps.CheckBooleanFlag("vanillaSMT", ref VanillaSMT)
           )
           {
