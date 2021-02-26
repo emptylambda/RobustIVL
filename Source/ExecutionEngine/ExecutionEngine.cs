@@ -479,7 +479,6 @@ namespace Microsoft.Boogie
         {
           PrintBplFile(CommandLineOptions.Clo.PrintFile, program, false, true, CommandLineOptions.Clo.PrettyPrint);
         }
-
         CivlTypeChecker civlTypeChecker;
         PipelineOutcome oc = ResolveAndTypecheck(program, fileNames[fileNames.Count - 1], out civlTypeChecker);
         if (oc != PipelineOutcome.ResolvedAndTypeChecked)
@@ -504,6 +503,22 @@ namespace Microsoft.Boogie
           Microsoft.Boogie.FeatureDetector.Scan(program, "./report.json");
 
           PrintBplFile("FeatureDetector.bpl", program, false);
+
+          Dictionary<Absy, Tuple<int, int>> featureDictionary = new Dictionary<Absy, Tuple<int, int>>();
+          Microsoft.Boogie.BuiltInAttr.Scan(program, featureDictionary);
+
+          foreach (Tuple<int,int> v in featureDictionary.Values)
+          {
+            Console.WriteLine(v);
+          }
+
+          Microsoft.Boogie.AssumeTrue.Scan(program, featureDictionary);
+          Console.WriteLine("BEFORE SMACKFIX");
+          program.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
+          Microsoft.Boogie.SMACKFix.Scan(program);
+          Console.WriteLine("AFTER SMACKFIX");
+          program.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
+
 
           // RemoveRedundancy r = new RemoveRedundancy();
           // r.Visit(program);
