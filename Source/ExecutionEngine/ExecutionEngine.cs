@@ -470,17 +470,6 @@ namespace Microsoft.Boogie
         return;
       }
 
-      //JEFF SMACK Fix routine
-      if(CommandLineOptions.Clo.SMACKFix)
-      {
-        Console.WriteLine("BEFORE SMACKFIX");
-        program.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
-        Microsoft.Boogie.SMACKFix.Scan(program);
-        Console.WriteLine("AFTER SMACKFIX");
-        program.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
-        return;
-      }
-
       using (XmlFileScope xf = new XmlFileScope(CommandLineOptions.Clo.XmlSink, fileNames[fileNames.Count - 1]))
       {
         Program program = ParseBoogieProgram(fileNames, false);
@@ -490,6 +479,19 @@ namespace Microsoft.Boogie
         {
           PrintBplFile(CommandLineOptions.Clo.PrintFile, program, false, true, CommandLineOptions.Clo.PrettyPrint);
         }
+
+
+        //JEFF SMACK Fix routine
+        if(CommandLineOptions.Clo.SMACKFix)
+        {
+          Console.WriteLine("BEFORE SMACKFIX");
+          program.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
+          Microsoft.Boogie.SMACKFix.Scan(program);
+          Console.WriteLine("AFTER SMACKFIX");
+          program.Emit(new TokenTextWriter("<console>", Console.Out, false, false));
+          return;
+        }
+
         CivlTypeChecker civlTypeChecker;
         PipelineOutcome oc = ResolveAndTypecheck(program, fileNames[fileNames.Count - 1], out civlTypeChecker);
         if (oc != PipelineOutcome.ResolvedAndTypeChecked)
