@@ -61,8 +61,9 @@ namespace Microsoft.Boogie.SMTLib
 
 
     [NotDelayed]
-    public SMTLibProcessTheoremProver(ProverOptions options, VCExpressionGenerator gen,
-      SMTLibProverContext ctx)
+    public SMTLibProcessTheoremProver(ProverOptions options,
+                                      VCExpressionGenerator gen,
+                                      SMTLibProverContext ctx)
     {
       Contract.Requires(options != null);
       Contract.Requires(gen != null);
@@ -89,8 +90,9 @@ namespace Microsoft.Boogie.SMTLib
 
       SetupProcess();
 
-      if (CommandLineOptions.Clo.StratifiedInlining > 0 || CommandLineOptions.Clo.ContractInfer
-                                                        || CommandLineOptions.Clo.SecureVcGen != null)
+      if (CommandLineOptions.Clo.StratifiedInlining > 0 ||
+          CommandLineOptions.Clo.ContractInfer          ||
+          CommandLineOptions.Clo.SecureVcGen != null)
       {
         // Prepare for ApiChecker usage
         if (options.LogFilename != null && currentLogFile == null)
@@ -3264,8 +3266,8 @@ namespace Microsoft.Boogie.SMTLib
       Contract.Ensures(Contract.Result<object>() != null);
 
       return this.SpawnProver(options,
-        cce.NonNull((SMTLibProverContext) ctxt).ExprGen,
-        cce.NonNull((SMTLibProverContext) ctxt));
+                              cce.NonNull((SMTLibProverContext) ctxt).ExprGen,
+                              cce.NonNull((SMTLibProverContext) ctxt));
     }
 
     public override object NewProverContext(ProverOptions options)
@@ -3292,8 +3294,8 @@ namespace Microsoft.Boogie.SMTLib
     }
 
     protected virtual SMTLibProcessTheoremProver SpawnProver(ProverOptions options,
-      VCExpressionGenerator gen,
-      SMTLibProverContext ctx)
+                                                             VCExpressionGenerator gen,
+                                                             SMTLibProverContext ctx)
     {
       Contract.Requires(options != null);
       Contract.Requires(gen != null);

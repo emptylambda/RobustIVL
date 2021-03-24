@@ -1393,6 +1393,7 @@ namespace Microsoft.Boogie
         vcgen = new SecureVCGen(program, CommandLineOptions.Clo.ProverLogFilePath,
                                 CommandLineOptions.Clo.ProverLogFileAppend, checkers);
       }
+      //JEFF Default VCGen, see Source/VCGeneration/VC.cs
       else
       {
         vcgen = new VCGen(program, CommandLineOptions.Clo.ProverLogFilePath,
