@@ -1,1 +1,1 @@
-dotnet build Source/Boogie.sln
+MSBUILDSINGLELOADCONTEXT=1 dotnet build Source/Boogie.sln
